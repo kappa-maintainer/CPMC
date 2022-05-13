@@ -481,125 +481,125 @@ public abstract class RenderPlayerHandler {
     }
 
     // copied
-    private static void setModelPose_c(AbstractClientPlayer abstractClientPlayerEntity_1) {
-        ModelPlayer playerEntityModel_1 = context.currentModel;
-        if (abstractClientPlayerEntity_1.isSpectator()) {
-            playerEntityModel_1.setVisible(false);
-            playerEntityModel_1.bipedHead.showModel = true;
-            playerEntityModel_1.bipedHeadwear.showModel = true;
+    private static void setModelPose_c(AbstractClientPlayer clientPlayer) {
+        ModelPlayer modelPlayer = context.currentModel;
+        if (clientPlayer.isSpectator()) {
+            modelPlayer.setVisible(false);
+            modelPlayer.bipedHead.showModel = true;
+            modelPlayer.bipedHeadwear.showModel = true;
         } else {
-            ItemStack itemStack_1 = abstractClientPlayerEntity_1.getHeldItemMainhand();
-            ItemStack itemStack_2 = abstractClientPlayerEntity_1.getHeldItemOffhand();
-            playerEntityModel_1.setVisible(true);
-            playerEntityModel_1.bipedHeadwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.HAT);
-            playerEntityModel_1.bipedBodyWear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.JACKET);
-            playerEntityModel_1.bipedLeftLegwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.LEFT_PANTS_LEG);
-            playerEntityModel_1.bipedRightLegwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.RIGHT_PANTS_LEG);
-            playerEntityModel_1.bipedLeftArmwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.LEFT_SLEEVE);
-            playerEntityModel_1.bipedRightArmwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.RIGHT_SLEEVE);
-            playerEntityModel_1.isSneak = abstractClientPlayerEntity_1.isSneaking();
-            ModelBiped.ArmPose modelbiped$armpose = ModelBiped.ArmPose.EMPTY;
-            ModelBiped.ArmPose modelbiped$armpose1 = ModelBiped.ArmPose.EMPTY;
+            ItemStack itemStack_1 = clientPlayer.getHeldItemMainhand();
+            ItemStack itemStack_2 = clientPlayer.getHeldItemOffhand();
+            modelPlayer.setVisible(true);
+            modelPlayer.bipedHeadwear.showModel = clientPlayer.isWearing(EnumPlayerModelParts.HAT);
+            modelPlayer.bipedBodyWear.showModel = clientPlayer.isWearing(EnumPlayerModelParts.JACKET);
+            modelPlayer.bipedLeftLegwear.showModel = clientPlayer.isWearing(EnumPlayerModelParts.LEFT_PANTS_LEG);
+            modelPlayer.bipedRightLegwear.showModel = clientPlayer.isWearing(EnumPlayerModelParts.RIGHT_PANTS_LEG);
+            modelPlayer.bipedLeftArmwear.showModel = clientPlayer.isWearing(EnumPlayerModelParts.LEFT_SLEEVE);
+            modelPlayer.bipedRightArmwear.showModel = clientPlayer.isWearing(EnumPlayerModelParts.RIGHT_SLEEVE);
+            modelPlayer.isSneak = clientPlayer.isSneaking();
+            ModelBiped.ArmPose armPose = ModelBiped.ArmPose.EMPTY;
+            ModelBiped.ArmPose armPose1 = ModelBiped.ArmPose.EMPTY;
             if (!itemStack_1.isEmpty()) {
-                modelbiped$armpose = ModelBiped.ArmPose.ITEM;
-                if (abstractClientPlayerEntity_1.getItemInUseCount() > 0) {
+                armPose = ModelBiped.ArmPose.ITEM;
+                if (clientPlayer.getItemInUseCount() > 0) {
                     EnumAction enumaction = itemStack_1.getItemUseAction();
                     if (enumaction == EnumAction.BLOCK)
-                        modelbiped$armpose = ModelBiped.ArmPose.BLOCK;
+                        armPose = ModelBiped.ArmPose.BLOCK;
                     else if (enumaction == EnumAction.BOW)
-                        modelbiped$armpose = ModelBiped.ArmPose.BOW_AND_ARROW;
+                        armPose = ModelBiped.ArmPose.BOW_AND_ARROW;
                 }
             }
 
             if (!itemStack_2.isEmpty()) {
-                modelbiped$armpose1 = ModelBiped.ArmPose.ITEM;
-                if (abstractClientPlayerEntity_1.getItemInUseCount() > 0) {
+                armPose1 = ModelBiped.ArmPose.ITEM;
+                if (clientPlayer.getItemInUseCount() > 0) {
                     EnumAction enumaction1 = itemStack_2.getItemUseAction();
                     if (enumaction1 == EnumAction.BLOCK)
-                        modelbiped$armpose1 = ModelBiped.ArmPose.BLOCK;
+                        armPose1 = ModelBiped.ArmPose.BLOCK;
                     else if (enumaction1 == EnumAction.BOW)
-                        modelbiped$armpose1 = ModelBiped.ArmPose.BOW_AND_ARROW;
+                        armPose1 = ModelBiped.ArmPose.BOW_AND_ARROW;
                 }
             }
 
-            if (abstractClientPlayerEntity_1.getPrimaryHand() == EnumHandSide.RIGHT) {
-                playerEntityModel_1.rightArmPose = modelbiped$armpose;
-                playerEntityModel_1.leftArmPose = modelbiped$armpose1;
+            if (clientPlayer.getPrimaryHand() == EnumHandSide.RIGHT) {
+                modelPlayer.rightArmPose = armPose;
+                modelPlayer.leftArmPose = armPose1;
             } else {
-                playerEntityModel_1.rightArmPose = modelbiped$armpose1;
-                playerEntityModel_1.leftArmPose = modelbiped$armpose;
+                modelPlayer.rightArmPose = armPose1;
+                modelPlayer.leftArmPose = armPose;
             }
-            MWHelper.handleMWItem(itemStack_1, playerEntityModel_1, abstractClientPlayerEntity_1);
+            MWHelper.handleMWItem(itemStack_1, modelPlayer, clientPlayer);
         }
 
     }
 
     private static void setModelPose(AbstractClientPlayer abstractClientPlayerEntity_1, CustomJsonModel model) {
-        ModelPlayer playerEntityModel_1 = context.currentModel;
+        ModelPlayer modelPlayer = context.currentModel;
         if (abstractClientPlayerEntity_1.isSpectator()) {
-            playerEntityModel_1.setVisible(false);
+            modelPlayer.setVisible(false);
             model.setVisible(false);
-            playerEntityModel_1.bipedHead.showModel = true;
+            modelPlayer.bipedHead.showModel = true;
             model.setVisible(PlayerBone.HEAD, true);
-            playerEntityModel_1.bipedHeadwear.showModel = true;
+            modelPlayer.bipedHeadwear.showModel = true;
             model.setVisible(PlayerBone.HEAD_OVERLAY, true);
         } else {
             ItemStack itemStack_1 = abstractClientPlayerEntity_1.getHeldItemMainhand();
             ItemStack itemStack_2 = abstractClientPlayerEntity_1.getHeldItemOffhand();
-            playerEntityModel_1.setVisible(true);
+            modelPlayer.setVisible(true);
             model.setVisible(true);
-            playerEntityModel_1.bipedHeadwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.HAT);
-            model.setVisible(PlayerBone.HEAD_OVERLAY, playerEntityModel_1.bipedHeadwear.showModel);
-            playerEntityModel_1.bipedBodyWear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.JACKET);
-            model.setVisible(PlayerBone.BODY_OVERLAY, playerEntityModel_1.bipedBodyWear.showModel);
-            playerEntityModel_1.bipedLeftLegwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.LEFT_PANTS_LEG);
-            model.setVisible(PlayerBone.LEFT_LEG_OVERLAY, playerEntityModel_1.bipedLeftLegwear.showModel);
-            playerEntityModel_1.bipedRightLegwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.RIGHT_PANTS_LEG);
-            model.setVisible(PlayerBone.RIGHT_LEG_OVERLAY, playerEntityModel_1.bipedRightLegwear.showModel);
-            playerEntityModel_1.bipedLeftArmwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.LEFT_SLEEVE);
-            model.setVisible(PlayerBone.LEFT_ARM_OVERLAY, playerEntityModel_1.bipedLeftArmwear.showModel);
-            playerEntityModel_1.bipedRightArmwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.RIGHT_SLEEVE);
-            model.setVisible(PlayerBone.RIGHT_ARM_OVERLAY, playerEntityModel_1.bipedRightArmwear.showModel);
+            modelPlayer.bipedHeadwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.HAT);
+            model.setVisible(PlayerBone.HEAD_OVERLAY, modelPlayer.bipedHeadwear.showModel);
+            modelPlayer.bipedBodyWear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.JACKET);
+            model.setVisible(PlayerBone.BODY_OVERLAY, modelPlayer.bipedBodyWear.showModel);
+            modelPlayer.bipedLeftLegwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.LEFT_PANTS_LEG);
+            model.setVisible(PlayerBone.LEFT_LEG_OVERLAY, modelPlayer.bipedLeftLegwear.showModel);
+            modelPlayer.bipedRightLegwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.RIGHT_PANTS_LEG);
+            model.setVisible(PlayerBone.RIGHT_LEG_OVERLAY, modelPlayer.bipedRightLegwear.showModel);
+            modelPlayer.bipedLeftArmwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.LEFT_SLEEVE);
+            model.setVisible(PlayerBone.LEFT_ARM_OVERLAY, modelPlayer.bipedLeftArmwear.showModel);
+            modelPlayer.bipedRightArmwear.showModel = abstractClientPlayerEntity_1.isWearing(EnumPlayerModelParts.RIGHT_SLEEVE);
+            model.setVisible(PlayerBone.RIGHT_ARM_OVERLAY, modelPlayer.bipedRightArmwear.showModel);
 
-            playerEntityModel_1.isSneak = abstractClientPlayerEntity_1.isSneaking();
-            ModelBiped.ArmPose modelbiped$armpose = ModelBiped.ArmPose.EMPTY;
-            ModelBiped.ArmPose modelbiped$armpose1 = ModelBiped.ArmPose.EMPTY;
+            modelPlayer.isSneak = abstractClientPlayerEntity_1.isSneaking();
+            ModelBiped.ArmPose armposeleft = ModelBiped.ArmPose.EMPTY;
+            ModelBiped.ArmPose armposeright = ModelBiped.ArmPose.EMPTY;
             if (!itemStack_1.isEmpty()) {
-                modelbiped$armpose = ModelBiped.ArmPose.ITEM;
+                armposeleft = ModelBiped.ArmPose.ITEM;
                 if (abstractClientPlayerEntity_1.getItemInUseCount() > 0) {
                     EnumAction enumaction = itemStack_1.getItemUseAction();
                     if (enumaction == EnumAction.BLOCK)
-                        modelbiped$armpose = ModelBiped.ArmPose.BLOCK;
+                        armposeleft = ModelBiped.ArmPose.BLOCK;
                     else if (enumaction == EnumAction.BOW)
-                        modelbiped$armpose = ModelBiped.ArmPose.BOW_AND_ARROW;
+                        armposeleft = ModelBiped.ArmPose.BOW_AND_ARROW;
                 }
             }
 
             if (!itemStack_2.isEmpty()) {
-                modelbiped$armpose1 = ModelBiped.ArmPose.ITEM;
+                armposeright = ModelBiped.ArmPose.ITEM;
                 if (abstractClientPlayerEntity_1.getItemInUseCount() > 0) {
                     EnumAction enumaction1 = itemStack_2.getItemUseAction();
                     if (enumaction1 == EnumAction.BLOCK)
-                        modelbiped$armpose1 = ModelBiped.ArmPose.BLOCK;
+                        armposeright = ModelBiped.ArmPose.BLOCK;
                     else if (enumaction1 == EnumAction.BOW)
-                        modelbiped$armpose1 = ModelBiped.ArmPose.BOW_AND_ARROW;
+                        armposeright = ModelBiped.ArmPose.BOW_AND_ARROW;
                 }
             }
 
 
             if (abstractClientPlayerEntity_1.getPrimaryHand() == EnumHandSide.RIGHT) {
-                playerEntityModel_1.rightArmPose = modelbiped$armpose;
-                playerEntityModel_1.leftArmPose = modelbiped$armpose1;
+                modelPlayer.rightArmPose = armposeleft;
+                modelPlayer.leftArmPose = armposeright;
             } else {
-                playerEntityModel_1.rightArmPose = modelbiped$armpose1;
-                playerEntityModel_1.leftArmPose = modelbiped$armpose;
+                modelPlayer.rightArmPose = armposeright;
+                modelPlayer.leftArmPose = armposeleft;
             }
 
             if(CPMC.hasMW) {
-                MWHelper.handleMWItem(itemStack_1, playerEntityModel_1, abstractClientPlayerEntity_1);
+                MWHelper.handleMWItem(itemStack_1, modelPlayer, abstractClientPlayerEntity_1);
             }
             if(CPMC.hasHBM) {
-                HBMHelper.handleHBMItem(itemStack_1, itemStack_2, playerEntityModel_1);
+                HBMHelper.handleHBMItem(itemStack_1, itemStack_2, modelPlayer);
             }
         }
     }

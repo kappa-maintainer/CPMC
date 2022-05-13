@@ -121,6 +121,7 @@ dependencies {
     compileOnly fg.deobf( "curse.maven:artemislib-313590:2741812" )
     compileOnly fg.deobf( "curse.maven:resizingpotion-307853:2892807" )
     compileOnly fg.deobf( "curse.maven:customnpc-221826:2996912" )
+    compileOnly fg.deobf("curse.maven:trinkets-279900:3604719")
     compileOnly "h:hbm:1.6.5"
 
 

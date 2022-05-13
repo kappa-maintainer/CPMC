@@ -10,16 +10,19 @@ public class CPMCMixinLateLoader implements ILateMixinLoader {
 
     @Override
     public List<String> getMixinConfigs() {
-        return Lists.newArrayList("artemis.mixin.json", "mwcompact.mixin.json");
+        return Lists.newArrayList("artemis.mixin.json", "mwcompact.mixin.json", "trinkets.mixin.json");
     }
 
     @Override
     public boolean shouldMixinConfigQueue(String mixinConfig) {
-        if(mixinConfig.equals("artemis.mixin.json")) {
+        if (mixinConfig.equals("artemis.mixin.json")) {
             return Loader.isModLoaded("artemislib");
         }
-        if(mixinConfig.equals("mwcompact.mixin.json")) {
+        if (mixinConfig.equals("mwcompact.mixin.json")) {
             return Loader.isModLoaded("modularwarfare");
+        }
+        if (mixinConfig.equals("trinkets.mixin.json")) {
+            return Loader.isModLoaded("xat");
         }
         return false;
     }
