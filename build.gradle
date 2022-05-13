@@ -1,0 +1,208 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+buildscript {
+    repositories {
+        maven { url 'https://maven.minecraftforge.net' }
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://repo.spongepowered.org/repository/maven-public" }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.1"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:5.1.+'
+        classpath "org.spongepowered:mixingradle:0.7-SNAPSHOT"
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: "com.github.johnrengelman.shadow"
+apply plugin: 'org.spongepowered.mixin'
+
+
+version "0.1"
+group "gkappa.cpmc"
+archivesBaseName = "cpmc"
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+
+minecraft {
+    // The mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   Snapshot are built nightly.
+    // stable_#            Stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not always work.
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+    mappings channel: 'stable', version: '39-1.12'
+
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+
+            jvmArg "-Dfml.coreMods.load=gkappa.cpmc.CPMCMixinEarlyLoader"
+            jvmArg "-Dmixin.hotSwap=true"
+            jvmArg "-Dmixin.checks.interfaces=true"
+
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+        }
+
+        server {
+
+            jvmArg "-Dfml.coreMods.load=gkappa.cpmc.CPMCMixinEarlyLoader"
+            jvmArg "-Dmixin.hotSwap=true"
+            jvmArg "-Dmixin.checks.interfaces=true"
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+        }
+    }
+}
+
+configurations {
+    compileJar {
+        implementation.extendsFrom(compileJar)
+    }
+}
+
+repositories {
+    maven { url "https://repo.spongepowered.org/maven" }
+    maven {
+        url "https://cfa2.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+        metadataSources {
+            artifact()
+        }
+    }
+    maven {
+        url "https://maven.cleanroommc.com"
+    }
+    flatDir {
+        dirs "libs"
+    }
+}
+
+dependencies {
+    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
+    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
+    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+    compileJar("org.spongepowered:mixin:0.8.5") {
+        exclude module: "asm-commons"
+        exclude module: "asm-tree"
+        exclude module: "launchwrapper"
+        exclude module: "guava"
+        exclude module: "log4j-core"
+        exclude module: "gson"
+        exclude module: "commons-io"
+    }
+
+    compileOnly fg.deobf("zone.rong:mixinbooter:4.2")
+    runtimeOnly ("zone.rong:mixinbooter:4.2")
+
+    compileOnly fg.deobf( "curse.maven:cpm-338752:2873681" )
+    compileOnly fg.deobf( "curse.maven:aquaacrobatics-321792:3784709" )
+    compileOnly fg.deobf( "curse.maven:modularwarfare-350869:3600345" )
+    compileOnly fg.deobf( "curse.maven:artemislib-313590:2741812" )
+    compileOnly fg.deobf( "curse.maven:resizingpotion-307853:2892807" )
+    compileOnly fg.deobf( "curse.maven:customnpc-221826:2996912" )
+    compileOnly "h:hbm:1.6.5"
+
+
+}
+
+// Example for how to get properties into the manifest for reading by the runtime..
+jar {
+    manifest {
+        attributes([
+                "FMLCorePluginContainsFMLMod": "true",
+                "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+                "FMLCorePlugin": "gkappa.cpmc.CPMCMixinEarlyLoader",
+                "ForceLoadAsMod": "true"
+        ])
+    }
+}
+
+// Example configuration to allow publishing using the maven-publish task
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfJar')
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+//publish.dependsOn('reobfJar')
+
+java {
+    withSourcesJar()
+}
+
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.INCLUDE)
+    from (sourceSets.main.resources.srcDirs) {
+        include("mcmod.info")
+        expand("version": version)
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+
+    }
+}
+
+mixin {
+    add sourceSets.main, "mixins.cpmc.refmap.json"
+    disableAnnotationProcessorCheck()
+}
+
+shadowJar {
+    archiveClassifier.set(null)
+    configurations = [project.configurations.compileJar]
+}
+
+task thinShadowJar(type: ShadowJar) {
+    archiveClassifier.set("thin")
+    configurations = [project.configurations.compileJar]
+    relocators = shadowJar.relocators
+
+    dependencies {
+        exclude(dependency("org.spongepowered:mixin"))
+    }
+
+    manifest {
+        inheritFrom jar.manifest
+    }
+
+    from sourceSets.main.output
+}
+
+artifacts {
+    archives shadowJar
+    archives sourcesJar
+    archives thinShadowJar
+}
+
+reobf {
+    shadowJar {}
+    thinShadowJar {}
+}

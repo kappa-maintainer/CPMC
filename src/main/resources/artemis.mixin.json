@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "gkappa.cpmc.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.cpmc.refmap.json",
+  "target": "@env(DEFAULT)",
+  "mixins": [
+    "MixinAttachAttributes"
+  ],
+  "client": [
+    "MixinCustomModelNpc",
+    "MixinRenderEntityParameterFloat"
+  ],
+  "setSourceFile": true,
+  "minVersion": "0.8"
+}
+
