@@ -1,2 +1,2 @@
-# WrapFix
-Use Mixin to fix CJK text wrapping problems in vanilla and mods.
+# CPMC
+Use Mixin to fix Custom Player Model's compatibility 
