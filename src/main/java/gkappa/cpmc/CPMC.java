@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class CPMC {
     public static final String MODID = "cpmc";
     public static final String NAME = "CPMC";
-    public static final String VERSION = "0.1";
+    public static final String VERSION = "0.1.1";
     public static Logger logger;
     public static boolean hasCNPC = false;
     public static boolean hasMW = false;

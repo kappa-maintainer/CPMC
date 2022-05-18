@@ -7,9 +7,6 @@
   "client": [
     "MixinRenderPlayer"
   ],
-  "mixins": [
-    "MixinEntityPlayer"
-  ],
   "setSourceFile": true,
   "minVersion": "0.8"
 }
